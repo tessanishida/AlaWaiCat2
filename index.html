@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <title>AILP C^2</title>
+    <meta name="generator" content="Google Web Designer 4.2.0.0802">
+    <meta name="viewport" content="initial-scale=1.0">
+    <style type="text/css">
+      html, body 
+      {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+      }
+      
+      #map
+      {
+        position: absolute;
+        width: 100%;
+        height: 600px;
+        top: 90px;
+        
+      }
+      
+      h1
+      {
+        position: absolute;
+        width: 100%;
+        height: 30px;
+        padding: 20px;
+        text-align: left;
+        font-family: Montserrat;
+        font-size: 30px;
+        font-weight: normal;
+      }       
+    </style>
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic,400" rel="stylesheet" type="text/css">
+  </head>
+  
+  <body>
+    <h1>AILP C^2</h1>
+    <button onclick="buttonClick()">Send to Cat</button>
+    <div id="map">
+    <script>
+      //creates map
+      var map;
+      var markers = [];
+      var coord = [];
+      
+      function initMap()
+      {
+        map = new google.maps.Map(document.getElementById('map'),
+        {
+          //map options
+          center: {lat: 21.2871, lng: -157.8312},
+          zoom: 16,
+        });
+        
+        map.addListener('click', function(event) 
+        {
+        
+        
+          //if (markers.length < 4) // get visible
+          //{
+            markersOnMap(event.latLng);
+          //}
+          
+          
+        });
+     }
+     
+     function buttonClick ()
+      {
+        var btn = document.createElement("BUTTON");
+        document.body.appendChild(btn);
+        getCoord(markers);
+        
+        google.script.run.markerLocation(coord);
+        
+      }
+     
+      
+      // Adds a marker to the map and push to the array.
+      function markersOnMap (location) 
+      {
+      
+      //check conditions -- is it somewhere that the cat can go? 4 markers?
+      
+         var marker = new google.maps.Marker
+        ({
+          position: location,
+          clickable: true,
+          map: map
+        });
+        markers.push(marker);
+        
+       
+        // remove marker from map if marker is clicked
+        marker.addListener('click', function() 
+        {
+          marker.setMap(null);
+        });
+      }
+      
+      
+      //gets coordinates of markers and push to array
+      function getCoord(markers)
+      {
+        for (i = 0; i < markers.getLength(); i++)
+        {
+          if (markers[i].getVisible())
+          {
+            coord.push(markers[i].getPosition());
+          }
+        }
+      }
+      
+       
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEGUGVl55i7u10NoI5Jf8qVftb7STrFu8&callback=initMap"
+    async defer>
+    </script> 
+  
+  </body>
+  
+</html>
+
+
